@@ -43,8 +43,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const authenticate = (req, res, next) => {
-    const { token } = req.cookies;
-    console.log(token);
+    const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
 
     if (token) {
         jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
@@ -163,7 +163,8 @@ app.post('/login', async (req, res) => {
         }
 
         const token = jwt.sign({ email: found.email, role: found.role, firstName: found.firstName }, process.env.SECRET_KEY);
-        return res.cookie("token", token, { httpOnly: true, secure: true }).status(200).json({ msg: "Login successful" });
+        //return res.cookie("token", token, { httpOnly: true, secure: true }).status(200).json({ msg: "Login successful" });
+        return res.status(200).send({token})
     } catch (err) {
         console.log(err.message);
         return res.status(500).json({ err: "Server Error" });

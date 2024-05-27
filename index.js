@@ -46,8 +46,17 @@ const storage = multer.diskStorage({
 const upload=multer({storage:storage})
 
 const authenticate=(req,res,next)=>{
-    console.log(req.cookies)
+    //console.log(req.header)
+
+    //const token = req.header('Authorization');
+   
+    // console.log(req)
     const {token}=req.cookies;
+
+   // const authHeader = req.headers['authorization']
+   
+  //const token = authHeader && authHeader.split(' ')[1]
+  console.log(token)
     if(token){
         jwt.verify(token,process.env.SECRET_KEY,(err,user)=>{
             if(err){
@@ -130,6 +139,8 @@ app.post('/verify-otp', async(req, res) => {
         otpMap.delete(email); // OTP is used once
         const token =jwt.sign({email:found.email,role:found.role,firstName:found.firstName},process.env.SECRET_KEY);
         return res.cookie("token",token,{ httpOnly: true, secure: true }).status(200).json({msg:"Login successful....."})
+        //return res.status(200).json({ token });
+
 
     } else {
         return res.status(400).json({ msg: 'Invalid OTP' });
@@ -191,7 +202,8 @@ app.post('/login',async(req,res)=>{
     
         
         const token =jwt.sign({email:found.email,role:found.role,firstName:found.firstName},process.env.SECRET_KEY);
-            return res.cookie("token",token).status(200).json({msg:"Login successful....."})
+         return res.cookie("token",token).status(200).json({msg:"Login successful....."})
+           //return res.status(200).json({ token });
 
     }catch(err){
         console.log(err.message);

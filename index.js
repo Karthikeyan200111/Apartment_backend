@@ -46,6 +46,7 @@ const storage = multer.diskStorage({
 const upload=multer({storage:storage})
 
 const authenticate=(req,res,next)=>{
+    console.log(req.cookies)
     const {token}=req.cookies;
     if(token){
         jwt.verify(token,process.env.SECRET_KEY,(err,user)=>{
@@ -128,7 +129,7 @@ app.post('/verify-otp', async(req, res) => {
     if (storedOtp === otp) {
         otpMap.delete(email); // OTP is used once
         const token =jwt.sign({email:found.email,role:found.role,firstName:found.firstName},process.env.SECRET_KEY);
-        return res.cookie("token",token).status(200).json({msg:"Login successful....."})
+        return res.cookie("token",token,{ httpOnly: true, secure: true }).status(200).json({msg:"Login successful....."})
 
     } else {
         return res.status(400).json({ msg: 'Invalid OTP' });

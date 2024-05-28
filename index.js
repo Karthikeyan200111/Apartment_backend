@@ -20,11 +20,19 @@ mongoose.connect(process.env.MONGODB_URL, { enableUtf8Validation: true });
 app.use(CookieParser());
 app.use(express.json());
 
-// app.use(cors({
-//     credentials: true,
-//     origin: [process.env.ALLOWED_SITE1, process.env.ALLOWED_SITE2]
-// }));
-app.use(cors())
+const allowedOrigins = [process.env.ALLOWED_SITE1, process.env.ALLOWED_SITE2];
+
+app.use(cors({
+    credentials: true,
+    origin: (origin, callback) => {
+      if (allowedOrigins.includes(origin) || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    }
+  }));
+
 
 app.get('/', (req, res) => res.send('Hello World!'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

@@ -191,7 +191,9 @@ app.post('/post', authenticate, authenticateRole('Seller'), upload.single('place
 });
 
 app.get('/getpost', authenticate, async (req, res) => {
-    const { token } = req.cookies;
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+  
 
     if (token) {
         const allPost = await Post.find({});

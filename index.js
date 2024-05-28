@@ -117,7 +117,8 @@ app.post('/verify-otp', async (req, res) => {
         if (storedOtp === otp) {
             otpMap.delete(email);
             const token = jwt.sign({ email: found.email, role: found.role, firstName: found.firstName }, process.env.SECRET_KEY);
-            return res.cookie("token", token, { httpOnly: true, secure: true }).status(200).json({ msg: "Login successful" });
+            //return res.cookie("token", token, { httpOnly: true, secure: true }).status(200).json({ msg: "Login successful" });
+            return res.status(200).send({token})
         } else {
             return res.status(400).json({ msg: 'Invalid OTP' });
         }

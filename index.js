@@ -20,10 +20,11 @@ mongoose.connect(process.env.MONGODB_URL, { enableUtf8Validation: true });
 app.use(CookieParser());
 app.use(express.json());
 
-app.use(cors({
-    credentials: true,
-    origin: [process.env.ALLOWED_SITE1, process.env.ALLOWED_SITE2]
-}));
+// app.use(cors({
+//     credentials: true,
+//     origin: [process.env.ALLOWED_SITE1, process.env.ALLOWED_SITE2]
+// }));
+app.use(cors())
 
 app.get('/', (req, res) => res.send('Hello World!'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

@@ -20,7 +20,7 @@ mongoose.connect(process.env.MONGODB_URL, { enableUtf8Validation: true });
 app.use(CookieParser());
 app.use(express.json());
 
-const allowedOrigins = [process.env.ALLOWED_SITE1, process.env.ALLOWED_SITE2];
+const allowedOrigins = [process.env.ALLOWED_SITE1, process.env.ALLOWED_SITE2,process.env.ALLOWED_SITE3];
 
 app.use(cors({
     credentials: true,
